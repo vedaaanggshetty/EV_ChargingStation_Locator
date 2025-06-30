@@ -1,0 +1,9 @@
+torch
+pandas
+scikit-learn
+joblib
+numpy
+# 'higher' is an excellent library for meta-learning, but we'll start
+# with a manual implementation to keep it simple. Add it later for more
+# advanced MAML implementations if needed.
+# higher 

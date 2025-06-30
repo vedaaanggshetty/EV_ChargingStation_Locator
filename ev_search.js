@@ -1,5 +1,5 @@
 const application = {
-  key: 'btVdXlLhF1rgfMqkkAZv8aWClICR4ruk',
+  key: '3m6aG5h2rlhWF3HoyhRSKr8PRNWVA2IO',
   name: 'EV Search',
   version: '1.0'
 };
@@ -14,7 +14,7 @@ const ids = {
 
 const properties = [
   { name: 'available', label: 'available' },
-  { name: 'occupied', label: 'occupied' },
+  { name: 'occupied', labezl: 'occupied' },
   { name: 'outOfService', label: 'out of service' },
   { name: 'reserved', label: 'reserved' },
   { name: 'unknown', label: 'unknown' }
@@ -107,7 +107,7 @@ function formatText(location, response) {
 
   console.log(response);
   if (response == null || response.connectors.length == 0) {
-    appendLine(div, 'span', 'Click Link to reach destination');
+    appendLine(div, 'span', 'Ports available J1772');
     return div.innerHTML;
   }
 

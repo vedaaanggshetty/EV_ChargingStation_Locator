@@ -1,325 +1,503 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
-    <title>EV Charging stations</title>
-    <style>
-        html {
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-
-
-        .bg-image {
-            /* The image used */
-            margin-bottom: 5%;
-            width: 55%;
-            /* Center and scale the image nicely */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-attachment: fixed;
-        }
-
-        h2 {
-            margin-bottom: 5%;
-            margin-top: 5%;
-        }
-
-        .container1 {
-            display: flex;
-            align-items: center;
-            justify-content: center
-        }
-
-        img {
-            max-width: 100%
-        }
-
-
-        .footer {
-            background: #343a40;
-            padding: 30px 0px;
-            font-family: 'Play', sans-serif;
-            text-align: center;
-        }
-
-        .footer .row {
-            width: 100%;
-            margin: 1% 0%;
-            padding: 0.6% 0%;
-            color: gray;
-            font-size: 0.8em;
-        }
-
-        .footer .row a {
-            text-decoration: none;
-            color: gray;
-            transition: 0.5s;
-        }
-
-        .footer .row a:hover {
-            color: #fff;
-        }
-
-        .footer .row ul {
-            width: 100%;
-        }
-
-        .footer .row ul li {
-            display: inline-block;
-            margin: 0px 30px;
-        }
-
-        .footer .row a i {
-            font-size: 2em;
-            margin: 0% 1%;
-        }
-
-        @media (max-width:720px) {
-            .footer {
-                text-align: left;
-                padding: 5%;
-            }
-
-            .footer .row ul li {
-                display: block;
-                margin: 10px 0px;
-                text-align: left;
-            }
-
-            .footer .row a i {
-                margin: 0% 3%;
-            }
-        }
-        .container2{
-            text-align: center;
-        }
-
-        /*.image {
-    flex-basis:70%;
-    order: 2;
-  }*/
-        .text {
-            color: rgb(61, 59, 59);
-
-        }
-        @media screen and (max-width: 1200px){
-            .text{
-                font-size: 15px;
-            }
-            .image{
-                width: 80%;
-                padding: 4px 4px 4px 4px ;
-            }
-        }
-        @media screen and (max-width: 768px){
-            .bg-image{
-                width: 60%;
-            }
-            .text{
-                font-size: 10px;
-            }
-            .image{
-                width: 50%;
-                padding-bottom: 10px;
-            }
-            .container1{
-                display: flex;
-                flex-direction: column;
-            }
-        }
-        @media screen and (max-width: 480px){
-            .text{
-                font-size: 8px;
-            }
-            .image{
-                width: 30%;
-                padding-bottom: 8px;
-            }
-            .container1{
-                display: flex;
-                flex-direction: column;
-            }
-
-        }
-        .find{
-            border-radius: 60%; 
-            width: 70%;
-        }
-        
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVapps - Your Smart EV Companion</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="http://127.0.0.1:5500/index.html" target="_blank">
-                <img src="image/logo11.jpg" width="100" height="100" alt="">
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav mx-auto">
-                    <a class="nav-item nav-link active" href="#about">About </a>
-                    <a class="nav-item nav-link" href="#stations">Stations</a>
-                    <a class="nav-item nav-link" href="#services">Services</a>
-                    <a class="nav-item nav-link" href="#footer">Contact-us</a>
+
+    <style>
+        :root {
+            --primary-green: #27ae60;
+            --dark-blue: #2c3e50;
+            --light-gray-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-color: #34495e;
+            --text-light: #7f8c8d;
+            --border-color: #e9ecef;
+            --border-radius-md: 8px;
+            --border-radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Header & Navigation --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-blue);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary-green);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-green);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: var(--border-radius-md);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-signup {
+            background-color: var(--white);
+            color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+
+        .btn-signup:hover {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-signin {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-signin:hover {
+            opacity: 0.9;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 5px auto;
+            background-color: var(--dark-blue);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding: 60px 0;
+        }
+
+        .hero-container {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .hero-text-content {
+            flex: 1;
+        }
+
+        .hero-text-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+        }
+
+        .hero-text-content h1 .highlight {
+            color: var(--primary-green);
+        }
+
+        .hero-text-content>p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 500px;
+            margin-bottom: 35px;
+        }
+
+        .btn-learn-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary-green);
+            color: var(--white);
+            padding: 14px 28px;
+            font-size: 1rem;
+        }
+
+        .btn-learn-more:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-learn-more svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .hero-image-container {
+            flex: 1;
+        }
+
+        .hero-image-container img {
+            width: 100%;
+            border-radius: var(--border-radius-lg);
+            display: block;
+            object-fit: cover;
+            max-height: 500px;
+        }
+
+        /* --- Features Section --- */
+        .features-section {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--dark-blue);
+            margin-bottom: 60px;
+        }
+
+        .feature-cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 30px;
+            background-color: var(--light-gray-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            border-color: var(--primary-green);
+        }
+
+        .card-icon {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--primary-green);
+        }
+
+        .card-icon svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        .card-text-content h3 {
+            font-size: 1.5rem;
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+        }
+
+        .card-text-content p {
+            color: var(--text-light);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* --- Footer --- */
+        .site-footer {
+            background-color: var(--dark-blue);
+            color: #bdc3c7;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .site-footer .logo {
+            color: var(--white);
+        }
+
+        .site-footer p {
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            .hero-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-text-content>p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 85px;
+                flex-direction: column;
+                background-color: var(--white);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                gap: 0;
+                z-index: 100;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-item {
+                width: 100%;
+            }
+
+            .nav-link {
+                padding: 1.5rem 0;
+                display: block;
+            }
+
+            .nav-buttons {
+                display: none;
+            }
+
+            .hero-text-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .feature-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+        }
+    </style>
+    <!-- ==================== HEADER ==================== -->
+    <header class="container">
+        <nav class="navbar">
+            <a href="#" class="logo">EV<span>apps</span></a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="#" class="btn btn-signup">Sign Up</a>
+                <a href="#" class="btn btn-signin">Sign In</a>
+            </div>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ==================== HERO SECTION ==================== -->
+        <section class="hero">
+            <div class="container hero-container">
+                <div class="hero-text-content">
+                    <h1>Your Journey, <span class="highlight">Charged</span> & Seamless</h1>
+                    <p>The ultimate companion for electric vehicle owners. Find stations, plan routes, and drive smarter
+                        with real-time data at your fingertips.</p>
+                    <a href="#features" class="btn btn-learn-more">
+                        Explore Features
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <polyline points="19 12 12 19 5 12"></polyline>
+                        </svg>
+                    </a>
                 </div>
-
-                
-
-            </div>
-            <div>
-    </nav>
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
-        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
-        crossorigin="anonymous"></script>
-
-
-    <br>
-    <div class="container1">
-        <div class="bg-image">
-            <img src="image/bg.jpg" alt="">
-        </div>
-    </div>
-    <!-- how can we help
-    <div class="container">
-      <h2 class="container2">HOW CAN WE HELP YOU??</h2>
-      <div class="d-flex justify-content-around">
-        <button type="button" class="btn btn-dark">EV </button>
-        <button type="button" class="btn btn-dark">Station Locator</button>
-        <button type="button" class="btn btn-dark">EV</button>
-      </div>
-    </div> -->
-
-
-    <!-- about us -->
-    <div class="container">
-        <h2 class="container2" id="about">ABOUT US</h2>
-        <div class="container1">
-            <div class="image">
-                <img src="image/about.gif">
-            </div>
-            <div class="text">
-                <p>An EV charging station is a device that allows drivers to charge up their electric cars while they’re
-                    parked at home or work. The station has two main components: A power source and a connector. The
-                    power source converts electricity into DC current, which is then converted into AC current using
-                    inverters..</p>
-                <p>You can search for the nearest charging station from our maps api page and can use it to get navigate
-                    it to the place.</p>
-            </div>
-        </div>
-
-        <!-- our stations -->
-        <div class="container">
-            <h2 class="container2" id="stations">OUR STATIONS</h2>
-            <div class="container1">
-                <div class="text">
-                    <p>1. Power
-                        Low-carbon energy sources such as wind farms and photovoltaic (PV) systems turn energy from wind
-                        or light into the electricity needed to meet the needs of commercial, industrial and
-                        residential customers.</p>
-                    <p>
-                        2. Business, Retail and Fleet Charging
-                        Charging whilst parked at work or during leisure activities is a convenient way to recharge.
-                    </p>
-                    <p>
-                        3.Charging On-the-Go
-                        On forecourts electric fast charging services are developed for drivers who need to recharge
-                        their vehicle during their journeys.
-                    </p>
-                    <p>4. Home charging
-                        Charging at home is often the most convenient and cost effective way for private customers to
-                        recharge their cars, as it is where most cars are parked overnight.</p>
-                </div>
-                <div class="image">
-                    <img src="image/first.jpg">
+                <div class="hero-image-container">
+                    <img src="https://images.unsplash.com/photo-1617886322207-6f504e7472c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                        alt="White electric car at a charging station">
                 </div>
             </div>
+        </section>
 
-            <!-- our services -->
+        <!-- ==================== FEATURES SECTION ==================== -->
+        <section id="features" class="features-section">
             <div class="container">
-                <div id="our_services">
-                    <div class="container marketing">
-                        <h2 class="container2" id="services">OUR SERVICES</h2>
-                        <!-- Three columns of text below the carousel -->
-                        <div class="row">
-                            <!-- /.col-lg-4 -->
-                            <div class="col-lg-4">
-                                <svg class="bd-placeholder-img rounded-circle" width="25" height="155"
-                                    xmlns="http://www.w3.org/2000/svg" src="logo.png" role="img"
-                                    aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice"
-                                    focusable="false"></svg><img src="image/circle1.jpg">
-                                <h4><strong>Search stations</strong></h4>
-                                <p class="text">You can now search nearby charging stations from your current locations and can also
-                                    see how many charging slots are available at that place.</p>
-                                <p><a class="btn btn-info" href="ev_search.html">Search Stations</a></p>
-                            </div><!-- /.col-lg-4 -->
-                            <div class="col-lg-4">
-                                <svg class="bd-placeholder-img rounded-circle" width="25" height="155"
-                                    xmlns="http://www.w3.org/2000/svg" src="logo.png" role="img"
-                                    aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice"
-                                    focusable="false"></svg><img class="find" src="image/route1.jpg">
-                                <h4><strong>Finding route</strong></h4>
-                                <p class="text">You can now search your destination path in the most simplest way from your current locations
-                                    .This feature enables you to find the route on your finger tips.</p>
-                                <p><a class="btn btn-info" href="ev_routing.html">Find Route</a></p>
-                            </div>
-                            <div class="col-lg-4">
-                                <svg class="bd-placeholder-img rounded-circle" width="25" height="100"
-                                    xmlns="http://www.w3.org/2000/svg" src="logo.png" role="img"
-                                    aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice"
-                                    focusable="false"></svg><img src="image/circle3.jpg">
-
-                                <h4><strong>Traffic detector</strong></h4>
-                                <p class="text">Get the taffic detection on your way to the destination.You can get information about the traffic status here.
-                                    Enjoy ride! Travel safe! 
+                <h2 class="section-title">Everything You Need In One App</h2>
+                <div class="feature-cards-container">
+                    <!-- Feature Card 1: Search -->
+                    <div class="feature-card">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        
+                        <a href="ev_search.html" style="text-decoration: none; color: inherit; display: block;">
+                            <div class="card-text-content">
+                                <h3>Search for Stations</h3>
+                                <p>
+                                    Quickly locate charging stations based on location, connector type, and real-time
+                                    availability.
                                 </p>
-                                <p><a class="btn btn-info" href="traffic.html">Detect Traffic</a></p>
-                            </div><!-- /.col-lg-4 -->
-                        </div><!-- /.row -->
+                            </div>
+                        </a>
+
+                    </div>
+                    <!-- Feature Card 2: Route -->
+                    <div class="feature-card">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polyline points="16 3 21 3 21 8"></polyline>
+                                <line x1="4" y1="20" x2="21" y2="3"></line>
+                                <polyline points="16 10 16 3 9 3"></polyline>
+                            </svg>
+                        </div>
+                        <div class="card-text-content">
+                            <h3>Route to Station</h3>
+                            <p>Get turn-by-turn directions to your chosen charging station for a hassle-free arrival.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Feature Card 3: Traffic -->
+                    <div class="feature-card">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"></path>
+                                <path d="M19 12v-2a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2"></path>
+                                <path d="M19 18h.5a2.5 2.5 0 0 0 0-5h-11a2.5 2.5 0 0 0 0 5H8"></path>
+                                <path d="M5 18v2"></path>
+                                <path d="M19 18v2"></path>
+                            </svg>
+                        </div>
+                        <div class="card-text-content">
+                            <h3>Find Traffic</h3>
+                            <p>Stay informed about traffic conditions along your route to avoid delays and save time.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="site-footer">
+        <div class="container">
+            <a href="#" class="logo">EV<span>apps</span></a>
+            <p>© 2023 EVapps. All Rights Reserved.</p>
         </div>
+    </footer>
 
+    <script>
 
-        <footer>
-            <div class="footer">
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector(".nav-menu");
 
+        hamburger.addEventListener("click", () => {
+            // Toggle active class on hamburger and nav menu
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
+        });
 
-                <div class="row">
-                    <ul>
-                        <li><a href="#about">About us</a></li>
-                        <li><a href="#services">Our Services</a></li>
-                        <li><a href="#stations">Our Stations</a></li>
-                        <li><a href="#">Terms & Conditions</a></li>
-                        <li><a href="#">Logo</a></li>
-                    </ul>
-                </div>
-            </div>
-        </footer>
+        // Close menu when a link is clicked
+        document.querySelectorAll(".nav-link").forEach(n => n.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            navMenu.classList.remove("active");
+        }));
 
+    </script>
 </body>
 
 </html>

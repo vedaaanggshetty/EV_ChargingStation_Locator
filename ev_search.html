@@ -1,157 +1,404 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-  <meta charset="UTF-8">
-  <title>EV Search</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>EV Charging Station Finder - Sidepanel</title>
 
-  <!-- <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.36.1/maps/maps.css"> -->
-  <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.36.1/maps/maps-web.min.js"></script>
-  <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.36.1/services/services-web.min.js"></script>
-  <script src="chargingAvailability.js"></script>
+    <!-- TomTom Maps SDK -->
+    <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.36.1/maps/maps.css">
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.36.1/maps/maps-web.min.js"></script>
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.36.1/services/services-web.min.js"></script>
 
-  <style>
-    body,
-    html {
-      margin: 0;
-      padding: 0;
-    }
+    <!-- External Resources -->
+    <script src="chargingAvailability.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-    #left,
-    #right {
-      height: 100vh
-    }
+    <style>
+        /* Base Styles */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+        }
 
-    #left {
-      float: left;
-      width: 200px;
-      overflow-y: auto;
-      background-color: rgb(255, 255, 251);
+        /* Map Container */
+        #map-container {
+            position: absolute;
+            top: 0;
+            left: 300px;
+            right: 0;
+            bottom: 0;
+        }
 
-    }
+        #map {
+            width: 100%;
+            height: 100%;
+        }
 
-    #right {
-      margin-left: 200px;
-    }
+        /* Sidebar Styles */
+        #sidebar {
+            position: fixed;
+            width: 300px;
+            height: 100%;
+            overflow-y: auto;
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
 
-    #map {
-      width: 100%;
-      height: 100%;
-    }
+        /* Form Elements */
+        .btn {
+            background-color: #2ac028;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 15px;
+        }
 
-    #controls,
-    #summary {
-      padding: 5px;
-    }
+        .btn:hover {
+            background-color: #077d34;
+        }
 
-    div.mapboxgl-popup-content>h3 {
-      margin: 0
-    }
+        .text-input {
+            width: 100%;
+            display: block;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            caret-color: #2ac028;
+        }
 
-    input.text {
-      margin-bottom: 5px;
-      line-height: 2px;
-    }
+        .label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 8px;
+        }
 
-    div.clear {
-      clear: both;
-    }
+        /* Search Suggestions */
+        #suggestions-container {
+            position: absolute;
+            width: calc(100% - 3rem);
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 0 0 8px 8px;
+            z-index: 20;
+            display: none;
+        }
 
-    .btn {
-      background-color: rgb(0, 128, 255);
-      color: white;
-      width: 100%;
-      padding: 10px 8px 10px 8px;
-      border-radius: 8px;
-      font-family: 'Times New Roman', Times, serif;
-      text-transform: uppercase;
-      border-color: aliceblue;
-      cursor: pointer;
-    }
+        .suggestion-item {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
 
-    .btn:hover {
-      background-color: rgb(83, 120, 251);
-    }
+        .suggestion-item:hover {
+            background-color: #f3f4f6;
+        }
 
-    .text {
-      width: 90%;
-      display: block;
-      margin-bottom: .75em;
-      padding: 2px 2px 2px 2px;
-    }
+        /* EV Companies Grid */
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 15px 0;
+        }
 
-    .loc {
-      display: block;
-      font-size: 1.1em;
-      font-weight: bolder;
-      color: lightslategray;
-    }
+        .company-icon {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin: 0 auto;
+            display: block;
+            transition: transform 0.2s;
+        }
 
-    input {
-      caret-color: blue;
-      border-radius: 1.3rem;
-      border-style: outset;
-      border-width: .15em;
-    }
-    .mcom{
-      margin-top: 100px;
-    }
+        .company-icon:hover {
+            transform: scale(1.1);
+        }
 
-    .com {
-      display: block;
-      width: 97%;
-      padding: 2px 2px 2px 2px;
-      
-    }
+        /* Section Styling */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 15px;
+        }
 
-    .icom {
-      display: block;
-      font-size: 5px;
-      width: 20%;
-      line-height: 1.6;
-      padding: 5px 5px 5px 5px;
-      
-    }
-  </style>
+        .divider {
+            border: 0;
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 15px 0;
+        }
+
+        /* Search Box */
+        .search-box {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        /* Nearest Station Highlight */
+        .nearest-station {
+            border: 2px solid #2ac028;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(42, 192, 40, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(42, 192, 40, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(42, 192, 40, 0);
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <div id="left">
-    <div id="controls">
-      <label for="location" class="loc"> Location:</label>
-      <input class="text" id="location" type="text" />
-      <br>
-      <label for="max_dist" class="loc"> MaximumDistance (km):</label>
-      <input class="text" id="distance" type="text" value="10" />
-      <br />
-      <input type="button" class="btn" value="Find Stations" onclick="findLocation()" />
-    </div>
-    <hr>
-    <div class="mcom">
-      <h3 class="text">EV Companies </h3>
-      <br>
-      <div class="com">
-        <img src="https://icon.horse/icon/heroelectric.in" class="icom">
-        <img src="https://icon.horse/icon/www.atherenergy.com" class="icom">
-        <img src="https://icon.horse/icon/www.tatamotors.com" class="icom">
-        <img
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHcAAAB3CAMAAAAO5y+4AAAAk1BMVEX////lGDfiAAD63N3rb3vkACPkACXlFDXrbXnkACr2wsb52dr2xcnjABvlDTLjABj74+X++PnjABH98fLugoz40tXzsLbyoqjnOU7tfIX86uvxnaTsdH/sfID0tbrrYG7uio/pUWLoSFfqaXHpW2PmK0PpWGjmJj3wkJj0u73nQU7lMj/wlp3oUFvyqa3pZGfkIzDus2eQAAAEsElEQVRoge2a23aqOhRAI5qEgAl3RLEoUrTuWuv/f92BJNys7a6ocexxmE8CMZPAYuUCAAwMDPyv8OxgaiRhGCb7aWB7D/fZxnG9yl1Ncy1KIYdaxaaWr/yjYT9CaSbrqFAhwvDoK5gRVJxD5CfBHZ3BcXsikLDaglkbXJ8JK0qd0mPg3O5cGMucQNnIslnUhaNok75mgtfXTbSDLi1OS/gxg+Rd3y9ukiarHSWyOmSR6HUZG6a98JxWixxvYZvGbPkaMQuJE8SE7rZhT7UTZCPK6ymagPKPt+n458j17OkhzRGU/6Esm/YI9cXOraRsEweiBscz97H/EnZK7pd+nASeuAReMPvAldpl4+vFaRlHDKFVIi6YefTTkebSIqStaatcQEl51zWczmcmly/2GUHlv3HeI8IMFxMtTXhDg8PWcmH9DGHa3DsPVTsZQ66bHvg5OclWI5iG39T9I3/gweNVTDSreYjEA3OqS72fHSGWloVlM72YnL6t+yd4m4zMgt2aRfUfstCKXDiIrNW+rqEH9mGHLkhLoM9LHOjlwwzht95500PwS1LEVXbi986gZ3tbBZHVO3cYLW+ROKjFQ0vmLhiAMZG/y0wGLYpayRvTpK8WgLAOVvi+io3AHNu2Ie8oy4NI3gRi2PbYDIw4i2D9h1l/bZETGK+asbBOPYtcVs2Y1OK8vqLOfiT+QG5obYm9KVsA2zHycR5qdXDz0yqvNYzM27QFM4uQQ3tH9sWbtQ8fEXEP4A44a63zSMTozIvi9mFP8+818ulm2cA683bSdSG+k/UcG5554UNGVl/wom6SwNHjR5Scz7Ou4FONFvjdvoDMFXnD7g2GR0XesdvxurfniN/hdR9gqCisgLNpBxbb3GGY/jteOt6JKi04tAOavCnzGu3RDd0r8y60lle7aSp0FU57PIOUhRUA2yawWKpOC9ZNYDFVWbJk1mSObqf/YIImU551+o/FaQJaUxhWAIyqgMZEpbYZU7KtUm+dKclaqTepun7Ya2rdG7sKaEtVpy+pAlpTqwVycqY4nAGYi8BiK8Xeo8iU5KZZbg+mwovUdfqChXiQFE2NWvAVCAxVa+UyYqTcy7t+ZVOjBp4plU2NGoKyvUhlpy/w+GqZujFszXvh3anXAp2pHcNWFGNKhVOjhilVOTVqGDNM7vl27Lc4Ods9IZwB2LA/z9CCOcz+XugBhJrKqVFDoKnPkiU27vEW7g44n6oWrs5YP0cLnpE1BgYGBgYGBgb+RRxzXCO+5DIbxJSoVYBve2ZnbNk6fMWY0zlpBW75QaZ24v/ztRoxZh7V22JFJ9Y6KyxZffiqj4O8ta7rIzbR9epTjJkuWMrl5ogsORO57D1zu+vfcSbKz69fz4t+WlqO3O72ubc/TttrNIjrHNFpxSVvUB+dXvuap+M9aJbAlW8/cyJ3QHTJu6USSK+90B0vSOYSWc2bL8H4kndFshdOTm7zfkvt7XxvtarWh7e3eb88v2BhBgWmWXtjWzAWXjlFTa/35i3vunl+RT1HKjeJeLERW5bcseHNdCvv9fd33V69CPUJZynqs9NJDd+xz8SG7vP4fcukbq0/ZclnYGBg4N/nP9n3TIvOdCz2AAAAAElFTkSuQmCC"
-          class="icom">
-        <img src="https://icon.horse/icon/okinawascooters.com" class="icom">
-        <img src="https://olectra.com/wp-content/uploads/Olectra-Colour.svg" class="icom">
-        <img src="https://amperevehicles.com/storage/images/logos/ampere_logo.svg" class="icom">
+    <!-- Sidebar -->
+    <aside id="sidebar">
+        <div class="p-6">
+            <div class="flex items-center mb-6">
+                <span class="material-icons-outlined text-3xl text-green-500 mr-3">electric_car</span>
+                <h1 class="text-2xl font-semibold text-gray-800">EV Station Finder</h1>
+            </div>
 
-      </div>
-    </div>
-  </div>
-  <div id="right">
-    <div id="map" class="map"></div>
-  </div>
-  <div class="clear" />
+            <!-- Search Filters -->
+            <div class="search-box">
+                <div class="mb-4 relative">
+                    <label class="label">Location:</label>
+                    <input class="text-input" id="location" type="text" placeholder="Enter a location"
+                        autocomplete="off" />
+                    <div id="suggestions-container"></div>
+                </div>
+                <div class="mb-4">
+                    <label class="label">Maximum Distance (km):</label>
+                    <input class="text-input" id="distance" type="number" value="10" min="1" />
+                </div>  
+                <!-- <button id="find-stations" class="btn">Find Stations</button> -->
+                <button onclick="findLocation()" class="btn">Find Stations</button>
 
-  <script src="ev_search.js"></script>
+                <!-- <button id="find-nearest" class="btn mt-2 bg-blue-500 hover:bg-blue-600">Find Nearest Station</button> -->
+            </div>
+
+            <hr class="divider">
+
+            <!-- EV Companies Section -->
+            <div>
+                <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">EV Companies</h2>
+                <div class="space-y-1">
+                    <a class="sidebar-item flex items-center space-x-3 p-3 text-gray-700" href="#">
+                        <span class="material-icons-outlined text-green-500">ev_station</span>
+                        <span>Ampe</span>
+                    </a>
+                    <a class="sidebar-item flex items-center space-x-3 p-3 text-gray-700" href="#">
+                        <span class="material-icons-outlined text-red-500">directions_car</span>
+                        <span>Tesla</span>
+                    </a>
+                    <a class="sidebar-item flex items-center space-x-3 p-3 text-gray-700" href="#">
+                        <span class="material-icons-outlined text-purple-500">local_gas_station</span>
+                        <span>ChargePoint</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Map Container -->
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="ev_search.js"></script>
+    <script>
+        // Initialize map when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            init(); // This calls the init() function from ev_search.js
+
+            // Add event listeners for new features
+            setupSearchSuggestions();
+            setupNearestStationFinder();
+        });
+
+        // Search Suggestions Implementation
+        function setupSearchSuggestions() {
+            const locationInput = document.getElementById('location');
+            const suggestionsContainer = document.getElementById('suggestions-container');
+            let debounceTimer;
+
+            locationInput.addEventListener('input', function (e) {
+                clearTimeout(debounceTimer);
+                const query = e.target.value.trim();
+
+                if (query.length < 3) {
+                    suggestionsContainer.style.display = 'none';
+                    return;
+                }
+
+                debounceTimer = setTimeout(() => {
+                    tt.services.fuzzySearch({
+                        key: application.key,
+                        query: query,
+                        limit: 5
+                    })
+                        .go()
+                        .then(function (response) {
+                            displaySuggestions(response.results);
+                        })
+                        .catch(function (error) {
+                            console.error('Error fetching suggestions:', error);
+                            suggestionsContainer.style.display = 'none';
+                        });
+                }, 300);
+            });
+
+            function displaySuggestions(results) {
+                suggestionsContainer.innerHTML = '';
+
+                if (!results || results.length === 0) {
+                    suggestionsContainer.style.display = 'none';
+                    return;
+                }
+
+                results.forEach(result => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'suggestion-item';
+                    suggestionItem.textContent = result.address.freeformAddress;
+
+                    suggestionItem.addEventListener('click', function () {
+                        locationInput.value = result.address.freeformAddress;
+                        suggestionsContainer.style.display = 'none';
+
+                        // Optionally center the map on the selected location
+                        map.setCenter([result.position.lng, result.position.lat]);
+                        map.setZoom(12);
+                    });
+
+                    suggestionsContainer.appendChild(suggestionItem);
+                });
+
+                suggestionsContainer.style.display = 'block';
+            }
+
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function (e) {
+                if (e.target !== locationInput) {
+                    suggestionsContainer.style.display = 'none';
+                }
+            });
+        }
+
+        // Nearest Station Finder Implementation
+        function setupNearestStationFinder() {
+            const findNearestBtn = document.getElementById('find-nearest');
+
+            findNearestBtn.addEventListener('click', function () {
+                if (navigator.geolocation) {
+                    findNearestBtn.disabled = true;
+                    findNearestBtn.textContent = 'Locating...';
+
+                    navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            findNearestStation(position.coords.latitude, position.coords.longitude);
+                            findNearestBtn.disabled = false;
+                            findNearestBtn.textContent = 'Find Nearest Station';
+                        },
+                        function (error) {
+                            alert('Error getting your location: ' + error.message);
+                            findNearestBtn.disabled = false;
+                            findNearestBtn.textContent = 'Find Nearest Station';
+                        }
+                    );
+                } else {
+                    alert('Geolocation is not supported by your browser');
+                }
+            });
+        }
+
+        function findNearestStation(lat, lng) {
+            // Clear existing markers
+            clearMarkers();
+
+            // Center map on user's location
+            map.setCenter([lng, lat]);
+            map.setZoom(14);
+
+            // Add marker for user's location
+            new tt.Marker({ color: 'green' })
+                .setLngLat([lng, lat])
+                .setPopup(new tt.Popup().setHTML('<b>Your Location</b>'))
+                .addTo(map);
+
+            // Find charging stations
+            tt.services.categorySearch({
+                key: application.key,
+                query: 'electric vehicle station',
+                center: [lng, lat],
+                radius: 5000, // 5km radius
+                limit: 50
+            })
+                .go()
+                .then(function (response) {
+                    if (!response.results || response.results.length === 0) {
+                        alert('No charging stations found nearby');
+                        return;
+                    }
+
+                    // Sort by distance
+                    const sortedStations = response.results.sort((a, b) => a.distance - b.distance);
+                    const nearestStation = sortedStations[0];
+
+                    // Create all markers
+                    createMarkers(response);
+
+                    // Highlight nearest station
+                    markers.forEach(marker => {
+                        if (marker.getLngLat().lng === nearestStation.position.lng &&
+                            marker.getLngLat().lat === nearestStation.position.lat) {
+                            marker.getElement().classList.add('nearest-station');
+                            marker.togglePopup();
+
+                            // Center map on nearest station
+                            map.setCenter([nearestStation.position.lng, nearestStation.position.lat]);
+                        }
+                    });
+
+                    // Show info about nearest station
+                    const nearestInfo = `Nearest station: ${nearestStation.address.freeformAddress} (${(nearestStation.distance / 1000).toFixed(1)} km away)`;
+                    console.log(nearestInfo);
+                })
+                .catch(function (error) {
+                    alert('Error finding stations: ' + error.message);
+                });
+        }
+    </script>
 </body>
 
 </html>
