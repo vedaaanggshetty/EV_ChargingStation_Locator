@@ -6,7 +6,7 @@ The website aims at providing a user-friendly interface which can be accessed by
 
 ![alt text](image.png)
 ![alt text](image-1.png)
-![WhatsApp Image 2022-10-16 at 2 56 04 PM (1)](https://user-images.githubusercontent.com/92366931/196028332-1e804a8e-d9f1-4cad-80c3-3d5ed14601fb.jpeg)
+<!-- ![WhatsApp Image 2022-10-16 at 2 56 04 PM (1)](https://user-images.githubusercontent.com/92366931/196028332-1e804a8e-d9f1-4cad-80c3-3d5ed14601fb.jpeg) -->
 
 # Features of the website
 
