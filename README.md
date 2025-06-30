@@ -4,7 +4,7 @@ EV charging involves supply of direct current (DC) to the battery pack. As elect
 The website aims at providing a user-friendly interface which can be accessed by any user without any limitations. Since the use of Electric vehicles have been increased the need for station locators have become a neccessaary aspect to travel through without any hassels. The website provides assistance in finding the best possible station in and around the place specified.
 # Home Page
 
-![WhatsApp Image 2022-10-16 at 2 52 58 PM](https://user-images.githubusercontent.com/92366931/196028187-0cae488a-f6e0-4026-bd5a-3496d294f796.jpeg)
+!![alt text](image.png)
 ![WhatsApp Image 2022-10-16 at 2 54 27 PM](https://user-images.githubusercontent.com/92366931/196028194-fc2634f7-b4f5-43c0-bdba-30b79d854dd8.jpeg)
 ![WhatsApp Image 2022-10-16 at 2 56 04 PM (1)](https://user-images.githubusercontent.com/92366931/196028332-1e804a8e-d9f1-4cad-80c3-3d5ed14601fb.jpeg)
 
