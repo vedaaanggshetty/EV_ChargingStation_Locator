@@ -14,8 +14,7 @@ The website aims at providing a user-friendly interface which can be accessed by
 
 The main feature of the website which enables easy access to EV charging station in and around the location the user enters.
 
-![WhatsApp Image 2022-10-16 at 3 11 34 PM](https://user-images.githubusercontent.com/92366931/196028704-2683fd07-ddd0-4eea-83ad-e761720fc5c1.jpeg)
-
+![alt text](image-2.png)
 ### 2.Map Routing [ ]
 <!-- 
 The feature of the website which enables the user to enroute his journey by specifing the his current loction and the the destination. 
