@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>EV Charging Station Finder - Sidepanel</title>
+
+    <!-- TomTom Maps SDK -->
+    <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.1/maps/maps.css">
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.1/maps/maps-web.min.js"></script>
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.1/services/services-web.min.js"></script>
+
+    <!-- External Resources -->
+    <script src="chargingAvailability.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+
+    <style>
+        /* Base Styles */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Map Container */
+        #map-container {
+            position: absolute;
+            top: 0;
+            left: 300px;
+            right: 0;
+            bottom: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Sidebar Styles */
+        #sidebar {
+            position: fixed;
+            width: 300px;
+            height: 100%;
+            overflow-y: auto;
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        /* Form Elements */
+        .btn {
+            background-color: #2ac028;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background-color: #077d34;
+        }
+
+        .text-input {
+            width: 100%;
+            display: block;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            caret-color: #2ac028;
+        }
+
+        .label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 8px;
+        }
+
+        /* Search Suggestions */
+        #suggestions-container {
+            position: absolute;
+            width: calc(100% - 3rem);
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 0 0 8px 8px;
+            z-index: 20;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        /* EV Companies Grid */
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 15px 0;
+        }
+
+        .company-icon {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin: 0 auto;
+            display: block;
+            transition: transform 0.2s;
+        }
+
+        .company-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Section Styling */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 15px;
+        }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 15px 0;
+        }
+
+        /* Search Box */
+        .search-box {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        /* Nearest Station Highlight */
+        .nearest-station {
+            border: 2px solid #2ac028;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(42, 192, 40, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(42, 192, 40, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(42, 192, 40, 0);
+            }
+        }
+
+        /* Panel Styles */
+        .panel {
+            position: fixed;
+            width: 300px;
+            height: 100%;
+            overflow-y: auto;
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            padding: 15px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .input input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            caret-color: #2ac028;
+        }
+
+        .button button {
+            background-color: #2ac028;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .button button:hover {
+            background-color: #077d34;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="panel">
+        <div class="row">
+            <div class="label">Location:</div>
+            <div class="input"><input class="text-input" id="location" type="text" placeholder="Enter a location" autocomplete="off" value="Amsterdam"/></div>
+        </div>
+        <div class="row">
+            <div class="label">Distance (km):</div>
+            <div class="input"><input class="text-input" id="distance" type="number" value="50" min="1"/></div>
+        </div>
+        <div class="row">
+            <div class="button"><button onclick="findLocation()" class="btn">Find Stations</button></div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- EV Companies Section -->
+        <div>
+            <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">EV Companies</h2>
+            <div class="space-y-1">
+                <a class="sidebar-item flex items-center space-x-3 p-3 text-gray-700" href="#">
+                    <span class="material-icons-outlined text-green-500">ev_station</span>
+                    <span>Ampe</span>
+                </a>
+                <a class="sidebar-item flex items-center space-x-3 p-3 text-gray-700" href="#">
+                    <span class="material-icons-outlined text-red-500">directions_car</span>
+                    <span>Tesla</span>
+                </a>
+                <a class="sidebar-item flex items-center space-x-3 p-3 text-gray-700" href="#">
+                    <span class="material-icons-outlined text-purple-500">local_gas_station</span>
+                    <span>ChargePoint</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Map Container -->
+    <div id="map-container">
+        <div id="map" class="map"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="ev_search.js"></script>
+    <script>
+        // Initialize map when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            init(); // This calls the init() function from ev_search.js
+
+            // Add event listeners for new features
+            setupSearchSuggestions();
+            setupNearestStationFinder();
+        });
+
+        // Search Suggestions Implementation
+        function setupSearchSuggestions() {
+            const locationInput = document.getElementById('location');
+            const suggestionsContainer = document.getElementById('suggestions-container');
+            let debounceTimer;
+
+            locationInput.addEventListener('input', function (e) {
+                clearTimeout(debounceTimer);
+                const query = e.target.value.trim();
+
+                if (query.length < 3) {
+                    suggestionsContainer.style.display = 'none';
+                    return;
+                }
+
+                debounceTimer = setTimeout(() => {
+                    tt.services.fuzzySearch({
+                        key: application.key,
+                        query: query,
+                        limit: 5
+                    })
+                        .go()
+                        .then(function (response) {
+                            displaySuggestions(response.results);
+                        })
+                        .catch(function (error) {
+                            console.error('Error fetching suggestions:', error);
+                            suggestionsContainer.style.display = 'none';
+                        });
+                }, 300);
+            });
+
+            function displaySuggestions(results) {
+                suggestionsContainer.innerHTML = '';
+
+                if (!results || results.length === 0) {
+                    suggestionsContainer.style.display = 'none';
+                    return;
+                }
+
+                results.forEach(result => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'suggestion-item';
+                    suggestionItem.textContent = result.address.freeformAddress;
+
+                    suggestionItem.addEventListener('click', function () {
+                        locationInput.value = result.address.freeformAddress;
+                        suggestionsContainer.style.display = 'none';
+
+                        // Optionally center the map on the selected location
+                        map.setCenter([result.position.lng, result.position.lat]);
+                        map.setZoom(12);
+                    });
+
+                    suggestionsContainer.appendChild(suggestionItem);
+                });
+
+                suggestionsContainer.style.display = 'block';
+            }
+
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function (e) {
+                if (e.target !== locationInput) {
+                    suggestionsContainer.style.display = 'none';
+                }
+            });
+        }
+
+        // Nearest Station Finder Implementation
+        function setupNearestStationFinder() {
+            const findNearestBtn = document.getElementById('find-nearest');
+
+            findNearestBtn.addEventListener('click', function () {
+                if (navigator.geolocation) {
+                    findNearestBtn.disabled = true;
+                    findNearestBtn.textContent = 'Locating...';
+
+                    navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            findNearestStation(position.coords.latitude, position.coords.longitude);
+                            findNearestBtn.disabled = false;
+                            findNearestBtn.textContent = 'Find Nearest Station';
+                        },
+                        function (error) {
+                            alert('Error getting your location: ' + error.message);
+                            findNearestBtn.disabled = false;
+                            findNearestBtn.textContent = 'Find Nearest Station';
+                        }
+                    );
+                } else {
+                    alert('Geolocation is not supported by your browser');
+                }
+            });
+        }
+
+        function findNearestStation(lat, lng) {
+            // Clear existing markers
+            clearMarkers();
+
+            // Center map on user's location
+            map.setCenter([lng, lat]);
+            map.setZoom(14);
+
+            // Add marker for user's location
+            new tt.Marker({ color: 'green' })
+                .setLngLat([lng, lat])
+                .setPopup(new tt.Popup().setHTML('<b>Your Location</b>'))
+                .addTo(map);
+
+            // Find charging stations
+            tt.services.categorySearch({
+                key: application.key,
+                query: 'electric vehicle station',
+                center: [lng, lat],
+                radius: 5000, // 5km radius
+                limit: 50
+            })
+                .go()
+                .then(function (response) {
+                    if (!response.results || response.results.length === 0) {
+                        alert('No charging stations found nearby');
+                        return;
+                    }
+
+                    // Sort by distance
+                    const sortedStations = response.results.sort((a, b) => a.distance - b.distance);
+                    const nearestStation = sortedStations[0];
+
+                    // Create all markers
+                    createMarkers(response);
+
+                    // Highlight nearest station
+                    markers.forEach(marker => {
+                        if (marker.getLngLat().lng === nearestStation.position.lng &&
+                            marker.getLngLat().lat === nearestStation.position.lat) {
+                            marker.getElement().classList.add('nearest-station');
+                            marker.togglePopup();
+
+                            // Center map on nearest station
+                            map.setCenter([nearestStation.position.lng, nearestStation.position.lat]);
+                        }
+                    });
+
+                    // Show info about nearest station
+                    const nearestInfo = `Nearest station: ${nearestStation.address.freeformAddress} (${(nearestStation.distance / 1000).toFixed(1)} km away)`;
+                    console.log(nearestInfo);
+                })
+                .catch(function (error) {
+                    alert('Error finding stations: ' + error.message);
+                });
+        }
+    </script>
+</body>
+
+</html>

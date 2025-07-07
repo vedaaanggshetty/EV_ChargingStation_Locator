@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVapps - Your Smart EV Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #27ae60;
+            --dark-blue: #2c3e50;
+            --light-gray-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-color: #34495e;
+            --text-light: #7f8c8d;
+            --border-color: #e9ecef;
+            --border-radius-md: 8px;
+            --border-radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Header & Navigation --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-blue);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary-green);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-green);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: var(--border-radius-md);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-signup {
+            background-color: var(--white);
+            color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+
+        .btn-signup:hover {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-signin {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-signin:hover {
+            opacity: 0.9;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 5px auto;
+            background-color: var(--dark-blue);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding: 60px 0;
+        }
+
+        .hero-container {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .hero-text-content {
+            flex: 1;
+        }
+
+        .hero-text-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+        }
+
+        .hero-text-content h1 .highlight {
+            color: var(--primary-green);
+        }
+
+        .hero-text-content>p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 500px;
+            margin-bottom: 35px;
+        }
+
+        .btn-learn-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary-green);
+            color: var(--white);
+            padding: 14px 28px;
+            font-size: 1rem;
+            border-radius: var(--border-radius-md);
+        }
+
+        .btn-learn-more:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-learn-more svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .hero-image-container {
+            flex: 1;
+        }
+
+        .hero-image-container img {
+            width: 100%;
+            border-radius: var(--border-radius-lg);
+            display: block;
+            object-fit: cover;
+            max-height: 500px;
+        }
+
+        /* --- Features Section --- */
+        .features-section {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--dark-blue);
+            margin-bottom: 60px;
+        }
+
+        .feature-cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 30px;
+            background-color: var(--light-gray-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            border-color: var(--primary-green);
+        }
+
+        .card-icon {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--primary-green);
+        }
+
+        .card-icon svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        .card-text-content h3 {
+            font-size: 1.5rem;
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+        }
+
+        .card-text-content p {
+            color: var(--text-light);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* --- Footer --- */
+        .site-footer {
+            background-color: var(--dark-blue);
+            color: #bdc3c7;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .site-footer .logo {
+            color: var(--white);
+        }
+
+        .site-footer p {
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            .hero-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-text-content>p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 85px;
+                flex-direction: column;
+                background-color: var(--white);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                gap: 0;
+                z-index: 100;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-item {
+                width: 100%;
+            }
+
+            .nav-link {
+                padding: 1.5rem 0;
+                display: block;
+            }
+
+            .nav-buttons {
+                display: none;
+            }
+
+            .hero-text-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .feature-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== HEADER ==================== -->
+    <header class="container">
+        <nav class="navbar">
+            <a href="#" class="logo">EV<span>apps</span></a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="#" class="btn btn-signup">Sign Up</a>
+                <a href="#" class="btn btn-signin">Sign In</a>
+            </div>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ==================== HERO SECTION ==================== -->
+        <section class="hero">
+            <div class="container hero-container">
+                <div class="hero-text-content">
+                    <h1>Your Journey, <span class="highlight">Charged</span> & Seamless</h1>
+                    <p>The ultimate companion for electric vehicle owners. Find stations, plan routes, and drive smarter
+                        with real-time data at your fingertips.</p>
+                    <a href="#features" class="btn btn-learn-more">
+                        Explore Features
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <polyline points="19 12 12 19 5 12"></polyline>
+                        </svg> -->
+                    </a>
+                </div>
+                <div class="hero-image-container">
+             <img src="image/ev.png">
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== FEATURES SECTION ==================== -->
+        <section id="features" class="features-section">
+            <div class="container">
+                <h2 class="section-title">Everything You Need In One App</h2>
+                <div class="feature-cards-container">
+                    <!-- Feature Card 1: Search -->
+                    <div class="feature-card">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <a href="ev_search.html" style="text-decoration: none; color: inherit; display: block;">
+                            <div class="card-text-content">
+                                <h3>Search for Stations</h3>
+                                <p>
+                                    Quickly locate charging stations based on location, connector type, and real-time
+                                    availability.
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Feature Card 2: Route -->
+                    <div class="feature-card">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polyline points="16 3 21 3 21 8"></polyline>
+                                <line x1="4" y1="20" x2="21" y2="3"></line>
+                                <polyline points="16 10 16 3 9 3"></polyline>
+                            </svg>
+                        </div>
+                        <div class="card-text-content">
+                            <h3>Route to Station</h3>
+                            <p>Get turn-by-turn directions to your chosen charging station for a hassle-free arrival.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Feature Card 3: Traffic -->
+                    <div class="feature-card">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M17 18a2 0 0 0-2-2H9a2 0 0 0-2 2"></path>
+                                <path d="M19 12v-2a2 0 0 0-2-2H7a2 0 0 0-2 2v2"></path>
+                                <path d="M19 18h.5a2.5 2.5 0 0 0 0-5h-11a2.5 2.5 0 0 0 0 5H8"></path>
+                                <path d="M5 18v2"></path>
+                                <path d="M19 18v2"></path>
+                            </svg>
+                        </div>
+                        <div class="card-text-content">
+                            <h3>Find Traffic</h3>
+                            <p>Stay informed about traffic conditions along your route to avoid delays and save time.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="site-footer">
+        <div class="container">
+            <a href="#" class="logo">EV<span>apps</span></a>
+            <p>© 2023 EVapps. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector(".nav-menu");
+
+        hamburger.addEventListener("click", () => {
+            // Toggle active class on hamburger and nav menu
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll(".nav-link").forEach(n => n.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            navMenu.classList.remove("active");
+        }));
+    </script>
+</body>
+</html>

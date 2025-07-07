@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>EV Charging Station Finder - Sidepanel</title>
+
+    <!-- TomTom Maps SDK -->
+    <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.36.1/maps/maps.css">
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.36.1/maps/maps-web.min.js"></script>
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.36.1/services/services-web.min.js"></script>
+
+    <!-- External Resources -->
+    <script src="chargingAvailability.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <style>
+        /* Base Styles */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Map Container */
+        #map-container {
+            position: absolute;
+            top: 0;
+            left: 300px;
+            right: 0;
+            bottom: 0;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Sidebar Styles */
+        #sidebar {
+            position: fixed;
+            width: 300px;
+            padding: 8px;
+            height: 100%;
+            overflow-y: auto;
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        /* Form Elements */
+        .btn {
+            background-color: #2ac028;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background-color: #077d34;
+        }
+
+        .text-input {
+            width: 100%;
+            display: block;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            caret-color: #2ac028;
+        }
+
+        .label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 8px;
+        }
+
+        /* EV Companies Grid */
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 15px 0;
+        }
+
+        .company-icon {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin: 0 auto;
+            display: block;
+            transition: transform 0.2s;
+        }
+
+        .company-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Section Styling */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 15px;
+        }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 15px 0;
+        }
+
+        /* Search Box */
+        .search-box {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside id="sidebar">
+        <div class="p-6">
+            <div class="flex items-center mb-6">
+                <span class="material-icons-outlined text-3xl text-green-500 mr-3">electric_car</span>
+                <h1 class="text-2xl font-semibold text-gray-800">EV Station Finder</h1>
+            </div>
+
+            <!-- Search Filters -->
+            <div class="search-box">
+                <div class="mb-4">
+                    <label class="label">Location:</label>
+                    <input class="text-input" id="location" type="text" placeholder="Enter a location" />
+                </div>
+                <div class="mb-4">
+                    <label class="label">Maximum Distance (km):</label>
+                    <input class="text-input" id="distance" type="number" value="10" min="1" />
+                </div>
+                <input type="button" class="btn" value="Find Stations" onclick="findLocation()" />
+            </div>
+
+            <hr class="divider">
+
+            <!-- EV Companies Section -->
+            <div>
+                <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">EV Companies</h2>
+                <div class="space-y-1">
+                    <a class="sidebar-item flex items-center space-x-3 p-3 text-gray-700" href="#">
+                        <span class="material-icons-outlined text-green-500">ev_station</span>
+                        <span>Ampe</span>
+                    </a>
+                    <a class="sidebar-item flex items-center space-x-3 p-3 text-gray-700" href="#">
+                        <span class="material-icons-outlined text-red-500">directions_car</span>
+                        <span>Tesla</span>
+                    </a>
+                    <!-- <a class="sidebar-item flex items-center space-x-3 p-3 text-gray-700" href="#">
+                        <span class="material-icons-outlined text-blue-500">charging_station</span>
+                        <span>Electrify America</span>
+                    </a> -->
+                    <a class="sidebar-item flex items-center space-x-3 p-3 text-gray-700" href="#">
+                        <span class="material-icons-outlined text-purple-500">local_gas_station</span>
+                        <span>ChargePoint</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Map Container -->
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="ev_search.js"></script>
+    <script>
+        // Initialize map when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            init(); // This calls the init() function from ev_search.js
+        });
+    </script>
+    
+    <!-- Test Page Content -->
+    <div class="p-6">
+        <h1>This is a Test Page</h1>
+        <p>This page was included in the original ZIP but is not part of the main application conversion.</p>
+        <p>It can be used for debugging or testing purposes if needed.</p>
+    </div>
+</body>
+</html>
