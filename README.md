@@ -8,3 +8,5 @@ The website aims at providing a user-friendly interface which can be accessed by
 <h2>1. Features </h2>
 
 ![alt text](image-1.png)
+
+<h2>
