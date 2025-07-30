@@ -5,6 +5,5 @@ The website aims at providing a user-friendly interface which can be accessed by
 
 ![alt text](image.png)
 
-1. Features
+<h2>1. Features </h2>
 ![alt text](image-1.png)
-2.Map Routing [ ]
