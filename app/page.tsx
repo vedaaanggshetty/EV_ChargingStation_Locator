@@ -42,7 +42,7 @@ export default function EVChargingApp() {
   useEffect(() => {
     // Save API key client side
     setTomtomKey(process.env.NEXT_PUBLIC_TOMTOM_API_KEY || "")
-    
+
     // Closer handling for autocomplete
     function handleClickOutside(event: any) {
       if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
@@ -151,7 +151,7 @@ export default function EVChargingApp() {
     setRouteMetrics(null)
     setAlgorithmResults(null)
     setStations([])
-    
+
     try {
       const stationsResponse = await fetch(
         `/api/stations?lat=${location.lat}&lng=${location.lng}&distance=${searchDistance || 25}`
@@ -203,15 +203,15 @@ export default function EVChargingApp() {
   }
 
   async function fetchRoutePath(start: any, dest: any) {
-      try {
-          const routeRes = await fetch(`/api/get-route?startLat=${start.lat}&startLng=${start.lng}&endLat=${dest.lat}&endLng=${dest.lng}`)
-          if (routeRes.ok) {
-              const routeData = await routeRes.json()
-              setRouteMetrics(routeData)
-          }
-      } catch(err) {
-          console.error("Routing error:", err)
+    try {
+      const routeRes = await fetch(`/api/get-route?startLat=${start.lat}&startLng=${start.lng}&endLat=${dest.lat}&endLng=${dest.lng}`)
+      if (routeRes.ok) {
+        const routeData = await routeRes.json()
+        setRouteMetrics(routeData)
       }
+    } catch (err) {
+      console.error("Routing error:", err)
+    }
   }
 
   function openDirections(station: any) {
@@ -227,28 +227,28 @@ export default function EVChargingApp() {
 
   // Downsample polyline to fit within TomTom Static Map URI limit
   function getDownsampledPath(points: any[] = [], maxPoints = 50) {
-      if(!points || points.length === 0) return "";
-      let step = Math.ceil(points.length / maxPoints);
-      let sample = [];
-      for(let i=0; i<points.length; i+=step) {
-          sample.push(`${points[i].lng},${points[i].lat}`);
-      }
-      if (points.length > 0 && (points.length - 1) % step !== 0) {
-          let last = points[points.length - 1];
-          sample.push(`${last.lng},${last.lat}`);
-      }
-      return `lw:4|lc:10B981|la:0.8|${sample.join('|')}`;
+    if (!points || points.length === 0) return "";
+    let step = Math.ceil(points.length / maxPoints);
+    let sample = [];
+    for (let i = 0; i < points.length; i += step) {
+      sample.push(`${points[i].lng},${points[i].lat}`);
+    }
+    if (points.length > 0 && (points.length - 1) % step !== 0) {
+      let last = points[points.length - 1];
+      sample.push(`${last.lng},${last.lat}`);
+    }
+    return `lw:4|lc:10B981|la:0.8|${sample.join('|')}`;
   }
 
   // Produce Map Preview URL
   let mapUrl = ""
   if (algorithmResults?.bestStation && userLocation) {
-      const pinStart = `sc:1|lc:1f2937|${userLocation.lng},${userLocation.lat}`
-      const pinEnd = `sc:1|lc:10B981|${algorithmResults.bestStation.lng},${algorithmResults.bestStation.lat}`
-      const pathOverlay = routeMetrics?.points ? `&path=${getDownsampledPath(routeMetrics.points)}` : ""
-      
-      const staticBase = `https://api.tomtom.com/map/1/staticimage?key=${tomtomKey}&format=png&layer=basic&style=main&width=800&height=400&view=Unified&padding=0.2`
-      mapUrl = `${staticBase}&mark=${pinStart}|${pinEnd}${pathOverlay}`
+    const pinStart = `sc:1|lc:1f2937|${userLocation.lng},${userLocation.lat}`
+    const pinEnd = `sc:1|lc:10B981|${algorithmResults.bestStation.lng},${algorithmResults.bestStation.lat}`
+    const pathOverlay = routeMetrics?.points ? `&path=${getDownsampledPath(routeMetrics.points)}` : ""
+
+    const staticBase = `https://api.tomtom.com/map/1/staticimage?key=${tomtomKey}&format=png&layer=basic&style=main&width=800&height=400&view=Unified&padding=0.2`
+    mapUrl = `${staticBase}&mark=${pinStart}|${pinEnd}${pathOverlay}`
   }
 
   return (
@@ -308,18 +308,18 @@ export default function EVChargingApp() {
                   onKeyPress={handleKeyPress}
                   className="border-0 shadow-none focus-visible:ring-0 text-lg h-12 w-full p-0 bg-transparent placeholder:text-gray-400 font-medium"
                 />
-                
+
                 {/* Autocomplete Dropdown */}
                 {showSuggestions && suggestions.length > 0 && (
                   <div className="absolute top-[120%] left-0 w-full bg-white rounded-2xl shadow-[0_12px_45px_rgb(0,0,0,0.12)] border border-gray-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-4 duration-200">
                     {suggestions.map((suggestion) => (
-                      <div 
+                      <div
                         key={suggestion.id}
                         onClick={() => handleSelectSuggestion(suggestion)}
                         className="px-5 py-3.5 hover:bg-emerald-50 cursor-pointer flex items-center border-b border-gray-50 last:border-0 transition-colors"
                       >
-                         <MapPin className="h-4 w-4 text-emerald-500 mr-3 shrink-0" />
-                         <span className="text-sm font-medium text-gray-800 text-left">{suggestion.text}</span>
+                        <MapPin className="h-4 w-4 text-emerald-500 mr-3 shrink-0" />
+                        <span className="text-sm font-medium text-gray-800 text-left">{suggestion.text}</span>
                       </div>
                     ))}
                   </div>
@@ -393,67 +393,78 @@ export default function EVChargingApp() {
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r z-10 from-emerald-400 to-emerald-500"></div>
 
                 <div className="flex flex-col h-full bg-white z-10 p-8 pb-6">
-                    <div className="flex items-center space-x-2 mb-6">
-                      <Trophy className="h-5 w-5 text-emerald-500" />
-                      <span className="text-xs font-bold uppercase tracking-widest text-emerald-600">Optimal Choice</span>
-                    </div>
+                  <div className="flex items-center space-x-2 mb-6">
+                    <Trophy className="h-5 w-5 text-emerald-500" />
+                    <span className="text-xs font-bold uppercase tracking-widest text-emerald-600">Optimal Choice</span>
+                  </div>
 
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight mb-3">
-                      {algorithmResults.bestStation.name}
-                    </h2>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight mb-3">
+                    {algorithmResults.bestStation.name}
+                  </h2>
 
-                    <p className="text-gray-500 font-medium flex items-start text-lg mb-6">
-                      <MapPin className="mr-2 h-5 w-5 shrink-0 mt-0.5 text-gray-400" />
-                      {algorithmResults.bestStation.address}
-                    </p>
+                  <p className="text-gray-500 font-medium flex items-start text-lg mb-6">
+                    <MapPin className="mr-2 h-5 w-5 shrink-0 mt-0.5 text-gray-400" />
+                    {algorithmResults.bestStation.address}
+                  </p>
                 </div>
-                
+
                 {/* Map Preview Area */}
                 <div className="w-full h-[260px] md:h-[320px] bg-gray-50 border-t border-gray-100 relative mt-auto">
-                    {mapUrl ? (
-                        <img src={mapUrl} alt="Route preview" className="object-cover w-full h-full absolute inset-0" />
-                    ) : (
-                        <div className="w-full h-full flex items-center justify-center flex-col text-gray-400 bg-gray-100/50">
-                            <Loader2 className="h-6 w-6 animate-spin mb-2" />
-                            <span className="text-sm font-medium">Generating Map Route...</span>
-                        </div>
-                    )}
-
-                    {/* Enhanced Routing Metrics Overlays overlaying the map */}
-                    {routeMetrics && (
-                        <div className="absolute bottom-4 left-4 flex gap-2">
-                           {/* Distance pill */}
-                           <div className="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-lg border border-gray-100 flex items-center">
-                              <div className="bg-blue-50 text-blue-500 h-6 w-6 rounded-md flex items-center justify-center mr-2">
-                                <Route className="h-3.5 w-3.5" />
-                              </div>
-                              <span className="text-sm font-bold text-gray-900">
-                                 {(routeMetrics.distanceMeters / 1000).toFixed(1)} <span className="text-gray-500 font-medium">km</span>
-                              </span>
-                           </div>
-                           
-                           {/* Time pill */}
-                           <div className="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-lg border border-gray-100 flex items-center">
-                              <div className="bg-emerald-50 text-emerald-500 h-6 w-6 rounded-md flex items-center justify-center mr-2">
-                                <Clock className="h-3.5 w-3.5" />
-                              </div>
-                              <span className="text-sm font-bold text-gray-900">
-                                 {Math.ceil(routeMetrics.travelTimeSeconds / 60)} <span className="text-gray-500 font-medium">min drive</span>
-                              </span>
-                           </div>
-                        </div>
-                    )}
-                    
-                    {/* Navigation action integrated into map corner */}
-                    <div className="absolute top-4 right-4">
-                        <Button
-                          onClick={() => openDirections(algorithmResults.bestStation)}
-                          className="h-12 px-6 rounded-full bg-gray-900 hover:bg-gray-800 shadow-xl text-white font-semibold transition-all duration-200"
-                        >
-                          <Navigation className="h-4 w-4 mr-2" />
-                          Start Navigation
-                        </Button>
+                  {algorithmResults?.bestStation?.lat && algorithmResults?.bestStation?.lng ? (
+                    <div className="absolute inset-0 z-0">
+                      <iframe
+                        src={`https://maps.google.com/maps?q=${algorithmResults.bestStation.lat},${algorithmResults.bestStation.lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="Map preview of optimal charging station"
+                      />
                     </div>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center flex-col text-gray-400 bg-gray-100/50 absolute inset-0 z-0">
+                      <Loader2 className="h-6 w-6 animate-spin mb-2" />
+                      <span className="text-sm font-medium">Generating Map Route...</span>
+                    </div>
+                  )}
+
+                  {/* Enhanced Routing Metrics Overlays overlaying the map */}
+                  {routeMetrics && (
+                    <div className="absolute bottom-4 left-4 flex gap-2 z-10 pointer-events-none">
+                      {/* Distance pill */}
+                      <div className="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-lg border border-gray-100 flex items-center">
+                        <div className="bg-blue-50 text-blue-500 h-6 w-6 rounded-md flex items-center justify-center mr-2">
+                          <Route className="h-3.5 w-3.5" />
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">
+                          {(routeMetrics.distanceMeters / 1000).toFixed(1)} <span className="text-gray-500 font-medium">km</span>
+                        </span>
+                      </div>
+
+                      {/* Time pill */}
+                      <div className="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-lg border border-gray-100 flex items-center">
+                        <div className="bg-emerald-50 text-emerald-500 h-6 w-6 rounded-md flex items-center justify-center mr-2">
+                          <Clock className="h-3.5 w-3.5" />
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">
+                          {Math.ceil(routeMetrics.travelTimeSeconds / 60)} <span className="text-gray-500 font-medium">min drive</span>
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Navigation action integrated into map corner */}
+                  <div className="absolute top-4 right-4 z-10">
+                    <Button
+                      onClick={() => openDirections(algorithmResults.bestStation)}
+                      className="h-12 px-6 rounded-full bg-gray-900 hover:bg-gray-800 shadow-xl text-white font-semibold transition-all duration-200"
+                    >
+                      <Navigation className="h-4 w-4 mr-2" />
+                      Start Navigation
+                    </Button>
+                  </div>
                 </div>
               </div>
 
@@ -528,7 +539,7 @@ export default function EVChargingApp() {
                   Alternative Charging Options
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                  {stations.filter((s:any) => s.name !== algorithmResults.bestStation.name).map((station, index) => (
+                  {stations.filter((s: any) => s.name !== algorithmResults.bestStation.name).map((station, index) => (
                     <div key={station.id || index} className="group bg-white rounded-2xl p-5 border border-gray-100 shadow-[0_2px_10px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-gray-200 transition-all duration-300">
                       <div className="flex justify-between items-start mb-3">
                         <h4 className="font-bold text-gray-900 leading-tight">{station.name}</h4>
